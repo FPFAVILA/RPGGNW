@@ -152,13 +152,14 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
   if (showSuccess) {
     return (
       <div
-        className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 z-50 overflow-y-auto"
+        className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-start justify-center p-3 z-50 overflow-y-auto"
         style={{
-          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+          paddingTop: '1rem',
+          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight + 12}px` : '1rem'
         }}
       >
-        <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
-          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 text-center relative overflow-hidden">
+        <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden my-auto max-h-[88vh] flex flex-col">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 text-center relative overflow-hidden flex-shrink-0">
             <div className="absolute inset-0 bg-white/10"></div>
             <div className="relative z-10">
               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
@@ -246,14 +247,15 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 z-50 overflow-y-auto"
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-start justify-center p-3 z-50 overflow-y-auto"
       style={{
-        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+        paddingTop: '1rem',
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight + 12}px` : '1rem'
       }}
     >
-      <div className="bg-white rounded-3xl w-full max-w-sm my-auto max-h-[92vh] overflow-y-auto shadow-2xl">
+      <div className="bg-white rounded-3xl w-full max-w-sm my-auto max-h-[88vh] overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="bg-emerald-500 p-4 rounded-t-3xl">
+        <div className="bg-emerald-500 p-4 rounded-t-3xl flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -274,7 +276,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="p-5 overflow-y-auto flex-1">
           {/* Aviso de KYC não verificado (só aparece se tiver saldo >= 40) */}
           {needsKYCVerification && (
             <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-4">
@@ -421,7 +423,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || balance < minWithdraw}
-              className={`w-full font-bold py-4 rounded-2xl transition-all duration-300 active:scale-95 shadow-modern text-lg ${
+              className={`w-full font-bold py-4 rounded-2xl transition-all duration-300 active:scale-95 shadow-modern text-lg mb-2 ${
                 balance < minWithdraw
                   ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                   : isSubmitting

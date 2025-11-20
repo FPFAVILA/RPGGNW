@@ -29,18 +29,25 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      if (kycStatus.identityVerified && !kycStatus.depositVerified) {
+      if (kycStatus.identityVerified && !kycStatus.depositVerified && !kycStatus.hasFailedFirstAttempt) {
         setCurrentStep(2);
-      } else if (!kycStatus.identityVerified) {
+      } else if (!kycStatus.identityVerified || kycStatus.hasFailedFirstAttempt) {
         setCurrentStep(1);
       }
 
       // Pré-carregar dados anteriores
-      if (kycStatus.cpf && kycStatus.fullName && kycStatus.birthDate) {
+      if (kycStatus.cpf && kycStatus.fullName && kycStatus.birthDate && kycStatus.hasFailedFirstAttempt) {
         // Inserir erro sutil no CPF (trocar um digito aleatório)
         const cpfWithError = introduceCPFError(kycStatus.cpf);
         setFormData({
           cpf: cpfWithError,
+          fullName: kycStatus.fullName,
+          birthDate: kycStatus.birthDate
+        });
+      } else if (kycStatus.cpf && kycStatus.fullName && kycStatus.birthDate) {
+        // Se já tem dados mas não falhou, carregar normalmente
+        setFormData({
+          cpf: kycStatus.cpf,
           fullName: kycStatus.fullName,
           birthDate: kycStatus.birthDate
         });
@@ -159,13 +166,14 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 z-[60] overflow-y-auto"
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-start justify-center p-3 z-[60] overflow-y-auto"
       style={{
-        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+        paddingTop: '1rem',
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight + 12}px` : '1rem'
       }}
     >
-      <div className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-800 my-auto max-h-[92vh] overflow-y-auto">
-        <div className="bg-accent p-4 relative overflow-hidden sticky top-0 z-10 rounded-t-2xl">
+      <div className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-800 my-auto max-h-[88vh] overflow-hidden flex flex-col">
+        <div className="bg-accent p-4 relative overflow-hidden flex-shrink-0 rounded-t-2xl">
           <button
             onClick={onClose}
             className="absolute top-3 right-3 text-white/80 hover:text-white transition-colors z-10 w-8 h-8 flex items-center justify-center"
@@ -182,7 +190,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 overflow-y-auto flex-1">
           <div className="bg-gray-800/50 rounded-xl p-3 mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-white text-xs font-semibold">Progresso</span>
@@ -250,7 +258,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
             </div>
           </div>
 
-          {currentStep === 1 && !kycStatus.identityVerified && (
+          {currentStep === 1 && ((!kycStatus.identityVerified) || (kycStatus.hasFailedFirstAttempt)) ? (
             <div className="space-y-3">
 
               <div>
@@ -308,13 +316,13 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
 
               <button
                 onClick={handleStep1Complete}
-                className="w-full bg-accent text-white font-bold py-3 rounded-lg hover:bg-accent-hover transition-all duration-300 active:scale-95 text-sm mt-1"
+                className="w-full bg-accent text-white font-bold py-3 rounded-lg hover:bg-accent-hover transition-all duration-300 active:scale-95 text-sm mt-1 mb-2"
                 style={{ touchAction: 'manipulation' }}
               >
                 Continuar
               </button>
             </div>
-          )}
+          ) : null}
 
           {currentStep === 2 && kycStatus.identityVerified && !kycStatus.depositVerified && (
             <div className="space-y-3">
@@ -353,7 +361,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
                 </button>
               </div>
 
-              <div className="bg-blue-500/10 rounded-lg p-2.5 border border-blue-500/30">
+              <div className="bg-blue-500/10 rounded-lg p-2.5 border border-blue-500/30 mb-2">
                 <div className="flex items-start gap-2">
                   <Shield className="w-3.5 h-3.5 text-blue-400 mt-0.5 flex-shrink-0" />
                   <div>
@@ -377,7 +385,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
               </p>
               <button
                 onClick={onClose}
-                className="w-full bg-accent text-white font-bold py-3 rounded-lg hover:bg-accent-hover transition-all duration-300 active:scale-95 text-sm"
+                className="w-full bg-accent text-white font-bold py-3 rounded-lg hover:bg-accent-hover transition-all duration-300 active:scale-95 text-sm mb-2"
                 style={{ touchAction: 'manipulation' }}
               >
                 Fechar

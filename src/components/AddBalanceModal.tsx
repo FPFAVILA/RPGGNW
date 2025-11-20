@@ -133,14 +133,15 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 overflow-y-auto"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-3 overflow-y-auto"
       style={{
-        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+        paddingTop: '1rem',
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight + 12}px` : '1rem'
       }}
     >
-      <div className="bg-white rounded-2xl max-w-sm w-full my-auto max-h-[92vh] shadow-2xl flex flex-col overflow-hidden">
+      <div className="bg-white rounded-2xl max-w-sm w-full my-auto max-h-[88vh] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-accent text-white p-4 rounded-t-2xl">
+        <div className="bg-accent text-white p-4 rounded-t-2xl flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">

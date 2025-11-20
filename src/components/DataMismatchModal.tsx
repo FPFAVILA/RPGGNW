@@ -15,10 +15,10 @@ export const DataMismatchModal: React.FC<DataMismatchModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-center justify-center p-3 z-[70] overflow-y-auto">
-      <div className="bg-gray-900 rounded-2xl w-full max-w-sm shadow-2xl border border-orange-500/30 my-auto max-h-[95vh] overflow-y-auto animate-scale-in">
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-start justify-center p-3 z-[70] overflow-y-auto" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+      <div className="bg-gray-900 rounded-2xl w-full max-w-sm shadow-2xl border border-orange-500/30 my-auto max-h-[90vh] overflow-hidden animate-scale-in flex flex-col">
 
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-4 text-center relative overflow-hidden sticky top-0 z-10">
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-4 text-center relative overflow-hidden flex-shrink-0">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
             <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 animate-pulse">
@@ -29,7 +29,7 @@ export const DataMismatchModal: React.FC<DataMismatchModalProps> = ({
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 overflow-y-auto flex-1">
           <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-3 mb-3">
             <div className="flex items-start gap-2 mb-3">
               <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -106,7 +106,7 @@ export const DataMismatchModal: React.FC<DataMismatchModalProps> = ({
             </div>
           </button>
 
-          <p className="text-center text-gray-400 text-[10px] mt-3">
+          <p className="text-center text-gray-400 text-[10px] mt-3 mb-2">
             Processo de seguranca obrigatorio para protecao da sua conta
           </p>
         </div>
