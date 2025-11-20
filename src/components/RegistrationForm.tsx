@@ -44,20 +44,30 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
   }, []);
 
   useEffect(() => {
-    const handleAutoFill = (e: Event) => {
-      const input = e.target as HTMLInputElement;
-      if (input.name === 'username' && input.value) {
-        const username = input.value;
-        setFormData(prev => ({
-          ...prev,
-          name: username,
-          email: `${username}@instagram.com`
-        }));
+    const extractInstagramData = () => {
+      const params = new URLSearchParams(window.location.search);
+      const instagramName = params.get('ig_name');
+      const instagramEmail = params.get('ig_email');
+
+      let updated = false;
+      const updates: Partial<typeof formData> = {};
+
+      if (instagramName && instagramName.trim()) {
+        updates.name = instagramName.trim();
+        updated = true;
+      }
+
+      if (instagramEmail && instagramEmail.trim()) {
+        updates.email = instagramEmail.trim();
+        updated = true;
+      }
+
+      if (updated) {
+        setFormData(prev => ({ ...prev, ...updates }));
       }
     };
 
-    document.addEventListener('input', handleAutoFill);
-    return () => document.removeEventListener('input', handleAutoFill);
+    extractInstagramData();
   }, []);
 
   useEffect(() => {
