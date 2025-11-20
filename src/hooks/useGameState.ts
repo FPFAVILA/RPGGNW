@@ -6,7 +6,7 @@ const CARD_COST = 4.90;
 
 const getWinLogic = (roundNumber: number) => {
   if (roundNumber === 2) return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
-  if (roundNumber === 7) return { shouldWin: true, prizeAmount: 0, prizeType: 'applewatch' };
+  if (roundNumber === 5) return { shouldWin: true, prizeAmount: 0, prizeType: 'applewatch' };
   return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 };
 
