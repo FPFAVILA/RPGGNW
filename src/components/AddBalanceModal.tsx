@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Copy, QrCode, CreditCard, Smartphone, CheckCircle, Shield } from 'lucide-react';
 import { useFictionalPix } from '../hooks/useFictionalPix';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 import { QRCodeGenerator } from './QRCodeGenerator';
 import { trackPurchase } from '../utils/tracking';
 
@@ -25,6 +26,7 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
   const [isCheckingPayment, setIsCheckingPayment] = useState(false);
   const paymentCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isProcessingRef = useRef(false);
+  const { keyboardHeight } = useKeyboardHeight();
 
   useEffect(() => {
     if (isOpen) {
@@ -130,8 +132,13 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 overflow-y-auto"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+      }}
+    >
+      <div className="bg-white rounded-2xl max-w-sm w-full my-auto max-h-[92vh] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-accent text-white p-4 rounded-t-2xl">
           <div className="flex items-center justify-between">

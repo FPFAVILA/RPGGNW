@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, AlertCircle, Shield, User, CreditCard, ChevronRight } from 'lucide-react';
 import { KYCStatus } from '../types';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 interface KYCVerificationModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
     birthDate: kycStatus.birthDate || ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { keyboardHeight } = useKeyboardHeight();
 
   useEffect(() => {
     if (isOpen) {
@@ -156,8 +158,13 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
 
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[60] overflow-y-auto">
-      <div className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-800 my-4 max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 z-[60] overflow-y-auto"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+      }}
+    >
+      <div className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-800 my-auto max-h-[92vh] overflow-y-auto">
         <div className="bg-accent p-4 relative overflow-hidden sticky top-0 z-10 rounded-t-2xl">
           <button
             onClick={onClose}

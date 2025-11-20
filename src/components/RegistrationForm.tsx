@@ -17,6 +17,7 @@ interface RegistrationFormProps {
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }) => {
   const [timeLeft, setTimeLeft] = useState(900);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -40,6 +41,45 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleAutoFill = (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      if (input.name === 'username' && input.value) {
+        const username = input.value;
+        setFormData(prev => ({
+          ...prev,
+          name: username,
+          email: `${username}@instagram.com`
+        }));
+      }
+    };
+
+    document.addEventListener('input', handleAutoFill);
+    return () => document.removeEventListener('input', handleAutoFill);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyboard = () => {
+      if (typeof window !== 'undefined' && 'visualViewport' in window && window.visualViewport) {
+        const viewport = window.visualViewport;
+        const handleResize = () => {
+          const currentHeight = window.innerHeight - viewport.height;
+          setKeyboardHeight(currentHeight > 0 ? currentHeight : 0);
+        };
+
+        viewport.addEventListener('resize', handleResize);
+        viewport.addEventListener('scroll', handleResize);
+
+        return () => {
+          viewport.removeEventListener('resize', handleResize);
+          viewport.removeEventListener('scroll', handleResize);
+        };
+      }
+    };
+
+    return handleKeyboard();
   }, []);
 
   const formatTime = (seconds: number) => {
@@ -161,7 +201,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
   const timerUrgency = getTimerUrgency();
 
   return (
-    <div className="min-h-screen bg-primary flex items-center justify-center p-4 relative overflow-hidden">
+    <div
+      className="min-h-screen bg-primary flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '1rem',
+        transition: 'padding-bottom 0.2s ease-out'
+      }}
+    >
       <div className="w-full max-w-sm relative z-10">
         {showSuccess && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">

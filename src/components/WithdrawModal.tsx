@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Banknote, Shield, Clock, CheckCircle, Copy, AlertTriangle } from 'lucide-react';
 import { KYCStatus } from '../types';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 interface WithdrawModalProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { keyboardHeight } = useKeyboardHeight();
 
   const minWithdraw = 40;
   const maxWithdraw = balance;
@@ -149,8 +151,13 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
   if (showSuccess) {
     return (
-      <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-        <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden my-4 max-h-[95vh] flex flex-col">
+      <div
+        className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 z-50 overflow-y-auto"
+        style={{
+          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+        }}
+      >
+        <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-white/10"></div>
             <div className="relative z-10">
@@ -238,8 +245,13 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 z-50 overflow-y-auto"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0.75rem'
+      }}
+    >
+      <div className="bg-white rounded-3xl w-full max-w-sm my-auto max-h-[92vh] overflow-y-auto shadow-2xl">
         {/* Header */}
         <div className="bg-emerald-500 p-4 rounded-t-3xl">
           <div className="flex items-center justify-between">
