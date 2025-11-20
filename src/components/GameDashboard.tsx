@@ -218,6 +218,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
 
   const handleReviewData = () => {
     setShowDataMismatchModal(false);
+    setKycDepositAmount(4.90);
     setTimeout(() => {
       setShowKYCModal(true);
     }, 300);

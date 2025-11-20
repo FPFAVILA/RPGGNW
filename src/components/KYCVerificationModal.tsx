@@ -156,7 +156,8 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
         cpf: formData.cpf,
         fullName: formData.fullName,
         birthDate: formData.birthDate,
-        depositAttempts: kycStatus.depositAttempts || 0
+        depositAttempts: kycStatus.depositAttempts || 0,
+        hasFailedFirstAttempt: false
       };
       onUpdateKYC(updatedKYC);
       setCurrentStep(2);
