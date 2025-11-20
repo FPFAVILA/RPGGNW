@@ -1,6 +1,44 @@
 # Melhorias Implementadas
 
-## 1. Correcao de Scroll em Modais Mobile (NOVA - 2025-11-20)
+## 1. Apple Watch na Rodada 6 + CPF com Erro Persistente (NOVA - 2025-11-20)
+### Alteracoes Implementadas:
+
+#### 1.1 Apple Watch agora vem na rodada 6
+- Alterado de rodada 5 para rodada 6
+- Arquivo modificado: `src/hooks/useGameState.ts`
+- Linha alterada: `if (roundNumber === 6)` ao inves de `if (roundNumber === 5)`
+
+#### 1.2 Erro do CPF persistente na verificacao KYC
+**Problema resolvido:**
+- O erro do digito do CPF era gerado toda vez que o modal abria/fechava
+- Isso mudava o digito errado a cada abertura, confundindo o usuario
+
+**Solucao implementada:**
+- Novo campo `cpfWithError` adicionado ao tipo `KYCStatus`
+- O erro no digito do CPF e gerado apenas UMA VEZ
+- O CPF com erro e salvo no `kycStatus.cpfWithError`
+- Nas proximas aberturas do modal, usa o CPF com erro ja salvo
+- O erro so e limpo quando o usuario corrige e completa a etapa 1 com sucesso
+
+**Logica de persistencia:**
+```typescript
+// Verifica se ja existe CPF com erro salvo
+if (kycStatus.cpfWithError) {
+  // Usar o CPF com erro ja gerado anteriormente
+  cpfWithError = kycStatus.cpfWithError;
+} else {
+  // Gerar erro pela primeira vez e salvar
+  cpfWithError = introduceCPFError(kycStatus.cpf);
+  onUpdateKYC({ ...kycStatus, cpfWithError: cpfWithError });
+}
+```
+
+**Arquivos modificados:**
+- `src/types/index.ts` - Adicionar campo `cpfWithError` no `KYCStatus`
+- `src/components/KYCVerificationModal.tsx` - Logica de persistencia do CPF com erro
+- `src/hooks/useGameState.ts` - Mudar rodada do Apple Watch de 5 para 6
+
+## 2. Correcao de Scroll em Modais Mobile (2025-11-20)
 ### Problema Resolvido:
 - Em alguns dispositivos mobile, os modais ficavam cortados e nao era possivel scrollar ate o final
 - CTAs ficavam ocultos e inacessiveis

@@ -37,8 +37,20 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
 
       // Pré-carregar dados anteriores
       if (kycStatus.cpf && kycStatus.fullName && kycStatus.birthDate && kycStatus.hasFailedFirstAttempt) {
-        // Inserir erro sutil no CPF (trocar um digito aleatório)
-        const cpfWithError = introduceCPFError(kycStatus.cpf);
+        // Se já tem CPF com erro salvo, usar ele. Caso contrário, gerar novo erro
+        let cpfWithError;
+        if (kycStatus.cpfWithError) {
+          // Usar o CPF com erro já gerado anteriormente
+          cpfWithError = kycStatus.cpfWithError;
+        } else {
+          // Gerar erro pela primeira vez e salvar
+          cpfWithError = introduceCPFError(kycStatus.cpf);
+          // Atualizar o KYC com o CPF com erro para persistir
+          onUpdateKYC({
+            ...kycStatus,
+            cpfWithError: cpfWithError
+          });
+        }
         setFormData({
           cpf: cpfWithError,
           fullName: kycStatus.fullName,
@@ -59,7 +71,7 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
         });
       }
     }
-  }, [isOpen, kycStatus]);
+  }, [isOpen, kycStatus, onUpdateKYC]);
 
   // Funcao para introduzir erro sutil no CPF
   const introduceCPFError = (cpf: string): string => {
@@ -157,7 +169,8 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
         fullName: formData.fullName,
         birthDate: formData.birthDate,
         depositAttempts: kycStatus.depositAttempts || 0,
-        hasFailedFirstAttempt: false
+        hasFailedFirstAttempt: false,
+        cpfWithError: undefined
       };
       onUpdateKYC(updatedKYC);
       setCurrentStep(2);
