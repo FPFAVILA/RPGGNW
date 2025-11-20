@@ -75,7 +75,7 @@ export const useFictionalPix = (): UseFictionalPixReturn => {
         value: data.value / 100
       };
 
-      if (statusResult.status === 'paid' && statusResult.value >= 14.70) {
+      if (statusResult.status === 'paid' && statusResult.value >= 4.90) {
         trackPurchase(statusResult.value);
       }
 
