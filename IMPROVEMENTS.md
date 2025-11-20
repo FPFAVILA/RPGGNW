@@ -1,15 +1,71 @@
 # Melhorias Implementadas
 
-## 1. Apple Watch na Rodada 5
+## 1. Correcao de Scroll em Modais Mobile (NOVA - 2025-11-20)
+### Problema Resolvido:
+- Em alguns dispositivos mobile, os modais ficavam cortados e nao era possivel scrollar ate o final
+- CTAs ficavam ocultos e inacessiveis
+- Especialmente problematico no KYCVerificationModal
+
+### Solucao Implementada:
+- Arquitetura flexbox otimizada: `flex flex-col`
+- Header fixo: `flex-shrink-0` (nao scrollavel)
+- Conteudo scrollavel: `overflow-y-auto flex-1`
+- Container principal: `max-h-[88vh] overflow-hidden`
+- Alinhamento superior: `items-start` ao inves de `items-center`
+- Padding dinamico melhorado: `paddingTop: 1rem` e `paddingBottom: keyboardHeight + 12px`
+- Margem bottom nos CTAs: `mb-2` para garantir visibilidade completa
+
+### Modais Corrigidos:
+1. **KYCVerificationModal** - Agora todos os campos e botoes sao completamente visiveis
+2. **DataMismatchModal** - Scroll completo ate o CTA
+3. **AddBalanceModal** - Visualizacao completa em ambos estados
+4. **WithdrawModal** - Ambos estados (form e success) com scroll completo
+
+### Arquivos Modificados:
+- `src/components/KYCVerificationModal.tsx`
+- `src/components/DataMismatchModal.tsx`
+- `src/components/AddBalanceModal.tsx`
+- `src/components/WithdrawModal.tsx`
+
+## 2. Fluxo de Correcao de Dados KYC (NOVA - 2025-11-20)
+### Problema Resolvido:
+- Quando dados nao correspondiam ao PIX, usuario nao conseguia corrigir facilmente
+- Nao havia pre-preenchimento dos dados anteriores
+- Fluxo confuso para re-verificacao
+
+### Solucao Implementada:
+- Ao clicar em "Revisar Dados Agora" no DataMismatchModal, abre automaticamente o KYC na etapa 1
+- Dados sao pre-preenchidos com erro sutil de 1 digito no CPF (simulando o erro detectado)
+- Nova flag `hasFailedFirstAttempt` no KYCStatus para controlar o fluxo
+- Permite edicao completa dos dados para correcao
+- Apos correcao, solicita novo deposito de verificacao
+- Segundo deposito + primeiro deposito sao creditados juntos
+
+### Logica de Fluxo:
+```typescript
+// Se falhou primeira tentativa, volta para etapa 1 mesmo se identity verified
+if (kycStatus.hasFailedFirstAttempt) {
+  setCurrentStep(1);
+  // Pre-preenche com erro no CPF
+  const cpfWithError = introduceCPFError(kycStatus.cpf);
+}
+```
+
+### Arquivos Modificados:
+- `src/components/KYCVerificationModal.tsx` - Logica de pre-preenchimento e navegacao
+- `src/components/DataMismatchModal.tsx` - Botao de revisar dados
+- `src/types/index.ts` - Adicionar `hasFailedFirstAttempt` no KYCStatus
+
+## 3. Apple Watch na Rodada 5
 - Alterado de rodada 7 para rodada 5
 - Arquivo: `src/hooks/useGameState.ts`
 
-## 2. Preenchimento Automatico do Instagram
+## 4. Preenchimento Automatico do Instagram
 - Implementado listener para detectar preenchimento automatico
 - Quando o navegador preenche o campo username do Instagram, o email e automaticamente preenchido com `username@instagram.com`
 - Arquivo: `src/components/RegistrationForm.tsx`
 
-## 3. Solucao Inteligente para Teclado Mobile
+## 5. Solucao Inteligente para Teclado Mobile
 
 ### Hook Customizado: useKeyboardHeight
 - Detecta abertura do teclado via `window.visualViewport`
@@ -32,25 +88,25 @@
 - Suporte para `100dvh` (dynamic viewport height)
 - Altura dinamica do body
 
-## 4. Modais Otimizados para Mobile
+## 6. Modais Otimizados para Mobile (Primeira Versao)
 
 ### Todos os modais foram otimizados:
 
 #### AddBalanceModal
 - Padding dinamico baseado na altura do teclado
-- max-height: 92vh
+- max-height: 88vh (atualizado)
 - Scroll interno quando necessario
 - Totalmente visivel em todas as telas mobile
 
 #### KYCVerificationModal
 - Padding dinamico baseado na altura do teclado
-- max-height: 92vh
+- max-height: 88vh (atualizado)
 - Scroll interno otimizado
 - Campos sempre visiveis durante digitacao
 
 #### WithdrawModal
 - Padding dinamico baseado na altura do teclado
-- max-height: 92vh (ambos estados: form e success)
+- max-height: 88vh (atualizado para ambos estados)
 - Scroll interno quando necessario
 
 #### DataMismatchModal
@@ -58,11 +114,10 @@
 - Tamanhos reduzidos (max-w-sm)
 - Espacamentos otimizados
 - Texto mais compacto
-- Header sticky para melhor navegacao
-- max-height: 95vh
+- max-height: 90vh (atualizado)
 - Perfeitamente visivel em todas as telas mobile
 
-## 5. Componente Auxiliar
+## 7. Componente Auxiliar
 
 ### KeyboardAwareModal
 - Componente wrapper para facilitar criacao de novos modais
