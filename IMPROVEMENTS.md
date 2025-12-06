@@ -1,6 +1,107 @@
 # Melhorias Implementadas
 
-## 1. Apple Watch na Rodada 6 + CPF com Erro Persistente (NOVA - 2025-11-20)
+## 1. Otimizacao de Conversao - Segundo Deposito (NOVA - 2025-12-06)
+### Problema Identificado:
+- Usuarios nao entendiam claramente que o primeiro deposito seria reembolsado
+- Falta de clareza sobre o erro especifico (apenas 1 digito do CPF)
+- Mensagens nao eram suficientemente persuasivas para o segundo deposito
+
+### Solucoes Implementadas:
+
+#### 1.1 Modal de Dados Divergentes Completamente Redesenhado
+**Arquivo:** `src/components/DataMismatchModal.tsx`
+
+**Mudancas Visuais:**
+- Header azul (ao inves de laranja) com icone de Shield transmitindo seguranca
+- Titulo mais especifico: "Erro no CPF Detectado" + "Apenas 1 digito esta incorreto"
+- Box verde destacado mostrando que o deposito esta SEGURO
+- Mensagem clara: "Seu dinheiro esta 100% seguro e sera devolvido!"
+
+**Nova Estrutura:**
+1. **Valor Seguro** (verde com check)
+   - Destaque visual do valor depositado
+   - Badge "DEPOSITO SEGURO"
+   - Mensagem: "Seu dinheiro esta 100% seguro e sera devolvido!"
+
+2. **Problema Identificado** (azul)
+   - Explica que e apenas 1 digito do CPF
+   - Tom amigavel: "E um erro simples de digitacao"
+   - Tranquiliza: "vamos corrigir juntos agora!"
+
+3. **Solucao Clara** (verde com gradiente)
+   - Passo a passo numerado (1, 2, 3)
+   - Calculo transparente mostrando o total que recebera
+   - Exemplo: "Receba os R$ 4,90 de volta + R$ 4,90 = Total R$ 9,80"
+   - Box final: "Voce NAO perdeu nada! Tudo sera creditado"
+
+4. **CTA Otimizado**
+   - Botao verde ao inves de laranja (cor de sucesso)
+   - Texto: "CORRIGIR CPF AGORA"
+   - Rodape: "Processo 100% seguro - Dinheiro garantido"
+
+#### 1.2 Mensagem Dinamica no AddBalanceModal
+**Arquivo:** `src/components/GameDashboard.tsx`
+
+**Nova Funcao:** `getDepositMessage()`
+- Detecta se e primeiro ou segundo deposito via `depositAttempts`
+- Mensagem personalizada para cada situacao
+
+**Segundo Deposito (depositAttempts === 1):**
+```
+IMPORTANTE: Seu deposito anterior de R$ 4,90 esta 100% SEGURO e sera devolvido!
+Apos este novo deposito de R$ 4,90, voce recebera R$ 9,80 no total (4,90 + 4,90).
+Voce NAO esta perdendo nada!
+```
+
+**Primeiro Deposito:**
+```
+Apos verificacao, voce podera sacar todo o seu saldo disponivel.
+O deposito de R$ 4,90 sera creditado automaticamente.
+```
+
+#### 1.3 Melhoria no KYCVerificationModal
+**Arquivo:** `src/components/KYCVerificationModal.tsx`
+
+**Quando e Correcao (hasFailedFirstAttempt):**
+- Box informativo azul no topo explicando:
+  - "Apenas 1 digito do CPF esta incorreto"
+  - "Os outros campos estao corretos, mas revise se preferir!"
+- Label do CPF com destaque: "CPF (CORRIGIR)" em amarelo
+- Border amarela no campo do CPF para chamar atencao
+- Dica visual: "Verifique se todos os digitos estao corretos"
+
+### Beneficios das Melhorias:
+
+1. **Transparencia Total**
+   - Usuario ve exatamente quanto vai receber de volta
+   - Calculo mostrado de forma clara (valor1 + valor2 = total)
+
+2. **Reducao de Fricao**
+   - Mensagens tranquilizadoras em vez de alarmantes
+   - Cores verdes (sucesso/seguranca) ao inves de laranjas (alerta)
+   - Enfase repetida: "NAO perdeu nada"
+
+3. **Clareza do Problema**
+   - Especifica que e apenas 1 digito do CPF
+   - Remove ambiguidade sobre qual dado esta errado
+   - Tom amigavel e colaborativo
+
+4. **Urgencia Positiva**
+   - "Solucao Rapida (2 minutos)"
+   - Passos numerados e simples
+   - CTA direto e claro
+
+5. **Conversao Otimizada**
+   - Mensagem personalizada para segundo deposito
+   - Calculo transparente do reembolso
+   - Garantias visuais e textuais de seguranca
+
+### Arquivos Modificados:
+- `src/components/DataMismatchModal.tsx` - Redesign completo
+- `src/components/GameDashboard.tsx` - Nova funcao getDepositMessage()
+- `src/components/KYCVerificationModal.tsx` - Mensagens de correcao
+
+## 2. Apple Watch na Rodada 6 + CPF com Erro Persistente (2025-11-20)
 ### Alteracoes Implementadas:
 
 #### 1.1 Apple Watch agora vem na rodada 6

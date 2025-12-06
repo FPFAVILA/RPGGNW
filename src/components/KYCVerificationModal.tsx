@@ -275,18 +275,43 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
           {currentStep === 1 && ((!kycStatus.identityVerified) || (kycStatus.hasFailedFirstAttempt)) ? (
             <div className="space-y-3">
 
+              {/* Mensagem de Correção */}
+              {kycStatus.hasFailedFirstAttempt && (
+                <div className="bg-blue-50 rounded-xl p-3 border-2 border-blue-300">
+                  <div className="flex items-start gap-2">
+                    <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <AlertCircle className="w-3 h-3 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-blue-900 font-bold text-xs mb-1">Correcao Necessaria</h4>
+                      <p className="text-blue-800 text-[10px] leading-relaxed mb-1">
+                        Apenas <span className="font-bold">1 digito do CPF</span> esta incorreto. Corrija abaixo:
+                      </p>
+                      <p className="text-blue-700 text-[10px] leading-relaxed">
+                        Os outros campos estao corretos, mas revise se preferir!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div>
-                <label className="block text-white font-semibold mb-1.5 text-xs">CPF</label>
+                <label className="block text-white font-semibold mb-1.5 text-xs">
+                  CPF {kycStatus.hasFailedFirstAttempt && <span className="text-yellow-400">(CORRIGIR)</span>}
+                </label>
                 <input
                   type="text"
                   value={formData.cpf}
                   onChange={handleCPFChange}
                   maxLength={14}
                   placeholder="000.000.000-00"
-                  className={`w-full bg-gray-800 border ${errors.cpf ? 'border-red-500' : 'border-gray-700'} text-white px-3 py-2.5 rounded-lg text-sm focus:outline-none focus:border-accent transition-colors`}
+                  className={`w-full bg-gray-800 border ${errors.cpf ? 'border-red-500' : kycStatus.hasFailedFirstAttempt ? 'border-yellow-400' : 'border-gray-700'} text-white px-3 py-2.5 rounded-lg text-sm focus:outline-none focus:border-accent transition-colors`}
                 />
                 {errors.cpf && (
                   <p className="text-red-400 text-[10px] mt-1">{errors.cpf}</p>
+                )}
+                {kycStatus.hasFailedFirstAttempt && !errors.cpf && (
+                  <p className="text-yellow-400 text-[10px] mt-1">Verifique se todos os digitos estao corretos</p>
                 )}
               </div>
 
