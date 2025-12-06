@@ -142,6 +142,9 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
       if (currentDepositAttempts === 0) {
         setDepositedAmount(amount);
 
+        // Enviar evento de compra no PRIMEIRO deposito (unico e desduplicado)
+        trackPurchase(amount);
+
         const updatedKYC = {
           ...gameState.kycStatus,
           depositAttempts: 1,
@@ -163,7 +166,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
       if (currentDepositAttempts === 1) {
         const totalAmount = amount + depositedAmount;
         addBalance(totalAmount);
-        trackPurchase(totalAmount);
+        // NAO envia evento de compra no segundo deposito para evitar duplicacao
 
         const updatedKYC = {
           ...gameState.kycStatus,
