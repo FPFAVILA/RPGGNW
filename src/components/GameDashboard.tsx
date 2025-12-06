@@ -10,6 +10,7 @@ import { PrizesSection } from './PrizesSection';
 import { MoneyPrizeModal } from './MoneyPrizeModal';
 import { KYCVerificationModal } from './KYCVerificationModal';
 import { DataMismatchModal } from './DataMismatchModal';
+import { trackPurchase } from '../utils/tracking';
 import {
   Play,
   Plus,
@@ -160,7 +161,9 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
       }
 
       if (currentDepositAttempts === 1) {
-        addBalance(amount + depositedAmount);
+        const totalAmount = amount + depositedAmount;
+        addBalance(totalAmount);
+        trackPurchase(totalAmount);
 
         const updatedKYC = {
           ...gameState.kycStatus,
@@ -180,6 +183,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     }
 
     addBalance(amount);
+    trackPurchase(amount);
     setShowAddBalanceModal(false);
   };
 

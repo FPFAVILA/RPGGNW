@@ -3,7 +3,6 @@ import { X, Copy, QrCode, CreditCard, Smartphone, CheckCircle, Shield } from 'lu
 import { useFictionalPix } from '../hooks/useFictionalPix';
 import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 import { QRCodeGenerator } from './QRCodeGenerator';
-import { trackPurchase } from '../utils/tracking';
 
 interface AddBalanceModalProps {
   isOpen: boolean;
@@ -54,7 +53,6 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
             paymentCheckIntervalRef.current = null;
           }
 
-          trackPurchase(status.value);
           onAddBalance(status.value);
 
           setTimeout(() => {

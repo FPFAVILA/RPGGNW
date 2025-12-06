@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { trackPurchase } from '../utils/tracking';
 
 interface PixData {
   qrcode: string;
@@ -74,10 +73,6 @@ export const useFictionalPix = (): UseFictionalPixReturn => {
         status: data.status,
         value: data.value / 100
       };
-
-      if (statusResult.status === 'paid' && statusResult.value >= 4.90) {
-        trackPurchase(statusResult.value);
-      }
 
       return statusResult;
     } catch (err) {
