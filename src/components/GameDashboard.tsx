@@ -230,7 +230,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
 
       if (currentDepositAttempts === 1) {
         // Segundo depósito - mensagem mais clara sobre reembolso
-        return `IMPORTANTE: Seu deposito anterior de R$ ${depositedAmount.toFixed(2).replace('.', ',')} esta 100% SEGURO e sera devolvido! Apos este novo deposito de R$ 4,90, voce recebera R$ ${(depositedAmount + 4.90).toFixed(2).replace('.', ',')} no total (${depositedAmount.toFixed(2).replace('.', ',')} + 4,90). Voce NAO esta perdendo nada!`;
+        return `IMPORTANTE:Apos verificacao, voce podera sacar todo o seu saldo disponivel.`;
       }
 
       // Primeiro depósito
